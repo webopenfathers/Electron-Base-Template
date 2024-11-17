@@ -11,6 +11,7 @@
   <button id="open-dev-tools">打开调试面板</button>
   <button id="close-dev-tools">关闭调试面板</button>
   <button id="get-version-info">获取系统信息</button>
+  <button id="goto-search">前往搜索页面</button>
 
   <div id="info-box" style="display: none;">
     <h1>你好</h1>
@@ -45,6 +46,12 @@
     document.getElementById('node-version').innerText = node
     document.getElementById('info-box').style.display = 'block'
 
+  })
+
+
+  let goToSearch = document.getElementById('goto-search')
+  goToSearch.addEventListener('click', () => {
+    window.location.href = 'search.html'
   })
 
 </script>

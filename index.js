@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, WebContentsView } = require('electron')
 
 const path = require('path')
 
@@ -13,6 +13,23 @@ const mainWindow = function () {
   })
 
   win.loadFile('./page/index.html')
+  win.setMenu(null)
+  let [width, height] = win.getContentSize()
+
+  let webview = null
+  // 创建webview
+  // 监听渲染进程发送的消息
+  ipcMain.on('create-webview', () => {
+    if (webview === null) {
+      webview = new WebContentsView()
+      webview.setBounds({ x: 0, y: 40, width, height: height - 40 }) // 设置webview的宽高
+      win.contentView.addChildView(webview) // 添加webview到win窗口
+    }
+  })
+
+  ipcMain.on('search-loadurl', (event, url) => {
+    webview.webContents.loadURL(url)
+  })
 
   // 渲染进程和主进程通信
   ipcMain.on('open-dev-tools', () => {
@@ -26,6 +43,14 @@ const mainWindow = function () {
   // 主进程向渲染进程发送消息
   ipcMain.handle('get-version-info', () => {
     return process.versions
+  })
+
+  // 监听win窗口变化
+  win.on('resize', () => {
+    let [width, height] = win.getContentSize()
+    if (webview) {
+      webview.setBounds({ x: 0, y: 40, width, height: height - 40 }) // 设置webview的宽高
+    }
   })
 }
 

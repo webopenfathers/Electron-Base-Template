@@ -7,8 +7,8 @@ const { contextBridge, ipcRenderer } = require('electron')
 // 参数一：给渲染进程的名字
 // 参数二：暴露的内容
 contextBridge.exposeInMainWorld('tools', {
-  ipcSend: (msg) => {
-    ipcRenderer.send(msg)
+  ipcSend: (msg, ...args) => {
+    ipcRenderer.send(msg, ...args)
   },
 
   ipcInvoke: (msg) => {
