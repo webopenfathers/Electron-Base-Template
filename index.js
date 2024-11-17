@@ -1,13 +1,14 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 
+const path = require('path')
+
 // 创建窗口
 const mainWindow = function () {
   let win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      preload: path.join(__dirname, './preload.js'),
     },
   })
 

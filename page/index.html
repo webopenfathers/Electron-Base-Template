@@ -21,35 +21,30 @@
 </body>
 
 <script>
-  const { ipcRenderer } = require('electron')
-
 
   const openDevTools = document.getElementById('open-dev-tools')
   openDevTools.addEventListener('click', () => {
-    ipcRenderer.send('open-dev-tools')
+    window.tools.ipcSend('open-dev-tools')
   })
 
 
   const closeDevTools = document.getElementById('close-dev-tools')
   closeDevTools.addEventListener('click', () => {
-    ipcRenderer.send('close-dev-tools')
+    window.tools.ipcSend('close-dev-tools')
   })
 
   // get-version-info
   const getVersionInfo = document.getElementById('get-version-info')
   getVersionInfo.addEventListener('click', () => {
-    ipcRenderer.invoke('get-version-info').then(versions => {
-      let chrome = versions.chrome
-      let electron = versions.electron
-      let node = versions.node
+    let chrome = window.versions.chrome()
+    let electron = window.versions.electron()
+    let node = window.versions.node()
 
-      document.getElementById('chrome-version').innerText = chrome
-      document.getElementById('electron-version').innerText = electron
-      document.getElementById('node-version').innerText = node
-      console.log(versions);
+    document.getElementById('chrome-version').innerText = chrome
+    document.getElementById('electron-version').innerText = electron
+    document.getElementById('node-version').innerText = node
+    document.getElementById('info-box').style.display = 'block'
 
-      document.getElementById('info-box').style.display = 'block'
-    })
   })
 
 </script>
