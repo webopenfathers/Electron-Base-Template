@@ -8,7 +8,50 @@
 </head>
 
 <body>
-  这是我的第个BrowserWindow5555555
+  <button id="open-dev-tools">打开调试面板</button>
+  <button id="close-dev-tools">关闭调试面板</button>
+  <button id="get-version-info">获取系统信息</button>
+
+  <div id="info-box" style="display: none;">
+    <h1>你好</h1>
+    <p>我们正在使用 Node.js 的<span id="node-version"></span>版本</p>
+    <p>我们正在使用 Chromium 的<span id="chrome-version"></span>版本</p>
+    <p>和 Electron 的<span id="electron-version"></span>版本</p>
+  </div>
 </body>
+
+<script>
+  const { ipcRenderer } = require('electron')
+
+
+  const openDevTools = document.getElementById('open-dev-tools')
+  openDevTools.addEventListener('click', () => {
+    ipcRenderer.send('open-dev-tools')
+  })
+
+
+  const closeDevTools = document.getElementById('close-dev-tools')
+  closeDevTools.addEventListener('click', () => {
+    ipcRenderer.send('close-dev-tools')
+  })
+
+  // get-version-info
+  const getVersionInfo = document.getElementById('get-version-info')
+  getVersionInfo.addEventListener('click', () => {
+    ipcRenderer.invoke('get-version-info').then(versions => {
+      let chrome = versions.chrome
+      let electron = versions.electron
+      let node = versions.node
+
+      document.getElementById('chrome-version').innerText = chrome
+      document.getElementById('electron-version').innerText = electron
+      document.getElementById('node-version').innerText = node
+      console.log(versions);
+
+      document.getElementById('info-box').style.display = 'block'
+    })
+  })
+
+</script>
 
 </html>
